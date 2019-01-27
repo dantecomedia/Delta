@@ -1,7 +1,14 @@
-#!/usr/bin/env python
+#! /usr/bin/python3
+
+
+
 import csv
 import time
 import math
+import getpass
+from playsound import playsound
+
+
 
 tt=0
 r=[]
@@ -16,12 +23,13 @@ def writerfile(r):
         writer=csv.writer(csvFile)
         writer.writerow(r)
     csvFile.close()
+    
 
-def countdown(t):
-    while(t>0):
+def countdown(mm):
+    while mm>0:
         time.sleep(1)
-        t=t-1
-        print('Time left :',t,end="\r")
+        mm=mm-1
+        print('Time left :',mm,end="\r")
 
 
 def start(r):
@@ -36,7 +44,7 @@ def start(r):
     zz=zip(c,pr)
     zz=list(zz)
     sub_n=len(c)
-    b=[]
+    
     t=[]
     temp_tt=tt
     print("Calling automatic allocation system...\n")
@@ -67,22 +75,29 @@ def allocate(c,t_sub,b,r):
 def scheduler(time1, c, t_sub, b):
     for i in c:
         j=0
-        print("Time for subject :", i, end="")
+        print("Time for subject :", i, end="\n")
         bar=math.ceil((time1[j]*60)/t_sub)
-        for i in range(bar):
-            print("Time Block %d for studying initatied \n"%i)
-            countdown(t_sub*60)
-            print("Time Block %d for release initatied \n"%i)
-            countdown(b*60)
-            print("Remaining the time Bar :",(bar-i), end="\n")
+        print("-------------------------------",i,"--------------------------------\n")
+        for k in range(1,bar):
+            print("Time Block %d for STUDYING initatied \n"%k)
+            playsound("/mnt/F8F8B8AFF8B86E0E/Delta Wing/Countdown 5 Seconds HD (NCI) {NOCOPYRIGHT INTRO}.mp3")
+            countdown((t_sub*60)-5)
+            print("Time Block %d for INTERVAL initatied \n"%k)
+            playsound("/mnt/F8F8B8AFF8B86E0E/Delta Wing/Intro RAW 2 soft music 5 seconds (TEST).mp3")
+            countdown((b*60)-5)
+            print("Remaining time Bar :",(bar-k), end="\n")
         j=j+1
+        print("-------------------------------xxx----------------------------------\n")
+    print("ENTIRE SCHEDULE COMPLETED \n")
+    run(0)
 
 
 
 
 
 # ----------------------------------------------command-----------------------------------------------
-def main(tt=0):
+
+def run(tt=0):
     print("Commands : \r")
     print("1.start 2.Break  3.RESET 4.Save to file 5.Scheduler 6.end \n")
     z=input()
@@ -95,12 +110,12 @@ def main(tt=0):
             d=time.time() - tik
             print("TIME ADDED BACK TO ", d, end="\n")
             tt= tt + d
-        main(0)
+        run(0)
     elif z=="start" or z=="1" :
         start(r)
     elif z=="RESET" or z=="3":
         r.clear()
-        main(0)
+        run(0)
     elif z=='end' or z=="6":
         exit()
     elif z=="5":
@@ -108,12 +123,23 @@ def main(tt=0):
     elif z=="4":
         writerfile(r)
         print("Written to the file....\n")
+        run(0)
     else:
         print("Invalid Response\n")
-        main(0)
+        run(0)
+
+def main(tt=0):
+    print("Enter PASSWORD to PROCEED\n")
+    p=getpass.getpass(prompt="Enter Password: ")
+    if p=="------":
+        run(tt=0)
+    else:
+        main(tt=0)
+
 
 
 
 
 if __name__=="__main__":
     main(tt)
+
